@@ -70,6 +70,10 @@ final class SignatureTest extends TestCase
 ./*def*/bar',
                 'SELECT FROM foo.bar'
             ],
+            [
+                'SELECT *,(SELECT COUNT(*) FROM table2 WHERE table2.field1 = table1.id) AS count FROM table1 WHERE table1.field1 = \'value\'',
+                'SELECT FROM table1'
+            ],
         ];
     }
 }

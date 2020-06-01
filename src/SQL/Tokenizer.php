@@ -73,7 +73,7 @@ final class Tokenizer
                 $token = $this->simpleComment();
                 break;
             case "'":
-                dump("'");
+                $token = $this->stringLiteral();
                 break;
             case (bool)preg_match(self::ALPHA, $char):
                 $token = $this->keywordOrIdent(true);
@@ -83,6 +83,31 @@ final class Tokenizer
         }
 
         return $token;
+    }
+
+    private function stringLiteral()
+    {
+        $delimiter = "'";
+
+        while ($char = $this->scanner->getCurrentChar()) {
+            if ("\\" === $char) {
+                // Skip escaped character: 'Aaron\'s house'
+                $this->getCurrentText();
+                continue;
+            }
+
+            if ($char !== $delimiter) {
+                continue;
+            }
+
+            if (null === $this->scanner->peek(1) || $this->scanner->peek(1) !== $delimiter) {
+                return new Token(TokenEnum::T_STRING, $this->getCurrentText());
+            }
+
+            $this->scanner->getCurrentChar();
+        }
+
+        return null;
     }
 
     private function bracketedComment()

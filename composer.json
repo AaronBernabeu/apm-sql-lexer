@@ -1,0 +1,29 @@
+{
+  "name": "aaronidas/apm-sql-lexer",
+  "description": "SQL Lexer for APM in PHP",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Aarón Bernabeu",
+      "email": "aaronidasbr@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Aaronidas\\SQLLexer\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Aaronidas\\SQLLexer\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=5.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8",
+    "symfony/var-dumper": "^2.8"
+  }
+}

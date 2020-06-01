@@ -67,10 +67,10 @@ final class Tokenizer
                 $token = new Token(TokenEnum::T_RPAREN, $char);
                 break;
             case '/':
-                dump('/');
+                $token = $this->bracketedComment();
                 break;
             case '-':
-                dump('-');
+                $token = $this->simpleComment();
                 break;
             case "'":
                 dump("'");
@@ -83,6 +83,53 @@ final class Tokenizer
         }
 
         return $token;
+    }
+
+    private function bracketedComment()
+    {
+        if ('*' !== $this->scanner->peek(1)) {
+            return new Token(TokenEnum::T_OTHER, $this->getCurrentText());
+        }
+
+        $nesting = 1;
+
+        while ($char = $this->scanner->getCurrentChar()) {
+            switch ($char) {
+                case '/':
+                    if ('*' !== $this->scanner->peek(1)) {
+                        continue 2;
+                    }
+                    $this->scanner->getCurrentChar();
+                    $nesting++;
+                    break;
+                case '*':
+                    if ('/' !== $this->scanner->peek(1)) {
+                        continue 2;
+                    }
+                    $this->scanner->getCurrentChar();
+                    $nesting--;
+                    if (0 === $nesting) {
+                        return new Token(TokenEnum::T_COMMENT, $this->getCurrentText());
+                    }
+            }
+        }
+
+        return null;
+    }
+
+    private function simpleComment()
+    {
+        if ('-' !== $this->scanner->peek(1)) {
+            return new Token(TokenEnum::T_OTHER, $this->getCurrentText());
+        }
+
+        while ($char = $this->scanner->getCurrentChar()) {
+            if ("\n" === $char) {
+                break;
+            }
+        }
+
+        return new Token(TokenEnum::T_COMMENT, $this->getCurrentText());
     }
 
     private function quotedIdent($delimiter)

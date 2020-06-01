@@ -73,6 +73,9 @@ final class Signature
         $previous = $currentTokenCollection;
 
         while ($current = $tokenCollection->nextValue()) {
+            if (TokenEnum::T_COMMENT === $current->type()) {
+                continue;
+            }
             if (TokenEnum::T_IDENT === $previous->type() && TokenEnum::T_PERIOD === $current->type()) {
                 $table .= $current->content();
                 $previous = $current;

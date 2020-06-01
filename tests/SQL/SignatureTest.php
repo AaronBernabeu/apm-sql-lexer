@@ -65,10 +65,11 @@ final class SignatureTest extends TestCase
                 'SELECT id FROM "myta\n-æøåble" WHERE id = 2323',
                 'SELECT FROM myta\n-æøåble'
             ],
-            //[
-            //    'SELECT * FROM foo-- abc\n./*def*/bar',
-            //    'SELECT FROM foo.bar'
-            //],
+            [
+                'SELECT * FROM foo-- abc
+./*def*/bar',
+                'SELECT FROM foo.bar'
+            ],
         ];
     }
 }

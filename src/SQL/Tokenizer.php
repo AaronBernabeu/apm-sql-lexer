@@ -19,9 +19,11 @@ final class Tokenizer
         $this->currentStartPosition = $this->scanner->currentPosition();
     }
 
+    /**
+     * @return TokenCollection
+     */
     public function scan()
     {
-        dump($this->input);
         $tokens = [];
         while (true) {
             $this->scanner->skip(self::SPACE);
@@ -33,8 +35,7 @@ final class Tokenizer
             $tokens[] = $this->nextToken($char);
         }
 
-        dump($tokens);
-        die;
+        return new TokenCollection($tokens);
     }
 
     private function nextToken($char)

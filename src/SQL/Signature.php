@@ -16,7 +16,7 @@ final class Signature
         $tokens = $this->tokenizer->scan();
         $firstElement = $tokens->nextValue();
 
-        $result = 'Unrecognized Query';
+        $result = '';
 
         if (null === $firstElement) {
             return $result;
@@ -70,12 +70,21 @@ final class Signature
 
         $table = $currentTokenCollection->content();
 
-        while ($element = $tokenCollection->nextValue()) {
-            if(false === \in_array($element->type(), [TokenEnum::T_PERIOD, TokenEnum::T_IDENT], true)) {
-                break;
+        $previous = $currentTokenCollection;
+
+        while ($current = $tokenCollection->nextValue()) {
+            if (TokenEnum::T_IDENT === $previous->type() && TokenEnum::T_PERIOD === $current->type()) {
+                $table .= $current->content();
+                $previous = $current;
+                continue;
+            }
+            if (TokenEnum::T_PERIOD === $previous->type() && TokenEnum::T_IDENT === $current->type()) {
+                $table .= $current->content();
+                $previous = $current;
+                continue;
             }
 
-            $table .= $element->content();
+            break;
         }
 
         return $table;

@@ -52,19 +52,19 @@ final class Tokenizer
                 dump('$');
                 break;
             case '`':
-                dump('`');
+                $token = $this->quotedIdent('`');
                 break;
             case '"':
-                dump('"');
+                $token = $this->quotedIdent('"');
                 break;
             case '[':
-                dump('[');
+                $token = $this->quotedIdent(']');
                 break;
             case '(':
-                dump('(');
+                $token = new Token(TokenEnum::T_LPAREN, $char);
                 break;
             case ')':
-                dump(')');
+                $token = new Token(TokenEnum::T_RPAREN, $char);
                 break;
             case '/':
                 dump('/');
@@ -85,6 +85,23 @@ final class Tokenizer
         return $token;
     }
 
+    private function quotedIdent($delimiter)
+    {
+        while ($char = $this->scanner->getCurrentChar()) {
+            if ($char !== $delimiter) {
+                continue;
+            }
+
+            if ('"' === $delimiter && $this->scanner->peek(1) === $delimiter) {
+                continue;
+            }
+
+            break;
+        }
+
+        return new Token(TokenEnum::T_IDENT, $this->getQuotedCurrentText());
+    }
+
     private function keywordOrIdent($possibleKeyword)
     {
         while ($char = $this->scanner->peek(1)) {
@@ -103,7 +120,7 @@ final class Tokenizer
         }
 
         if (false === $possibleKeyword) {
-            return TokenEnum::T_IDENT;
+            return new Token(TokenEnum::T_IDENT, $this->getCurrentText());
         }
 
         return new Token(TokenEnum::findKeyword($this->getCurrentText()), $this->getCurrentText());
@@ -112,5 +129,10 @@ final class Tokenizer
     private function getCurrentText()
     {
         return \substr($this->input, $this->currentStartPosition, $this->scanner->currentPosition() - $this->currentStartPosition);
+    }
+
+    private function getQuotedCurrentText()
+    {
+        return \substr($this->input, $this->currentStartPosition + 1, ($this->scanner->currentPosition() - ($this->currentStartPosition + 1)) - 1);
     }
 }

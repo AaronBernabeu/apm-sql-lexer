@@ -3,17 +3,72 @@
 namespace Aaronidas\SQLLexer\Tests\SQL;
 
 use Aaronidas\SQLLexer\SQL\Signature;
-use Aaronidas\SQLLexer\SQL\Tokenizer;
 use PHPUnit\Framework\TestCase;
 
-class SignatureTest extends TestCase
+final class SignatureTest extends TestCase
 {
-    /** @test */
-    public function signatureTest()
+    /**
+     * @test
+     * @dataProvider sqlProvider
+     */
+    public function signature_test($query, $expected)
     {
-        $signature = new Signature('SELECT * FROM foo.bar');
-        $result = $signature->parse();
+        $result = (new Signature($query))->parse();
 
-        $this->assertEquals('SELECT FROM foo.bar', $result);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function sqlProvider()
+    {
+        return [
+            [
+                'SELECT * FROM foo',
+                'SELECT FROM foo'
+            ],
+            [
+                'SELECT * FROM foo.bar',
+                'SELECT FROM foo.bar'
+            ],
+            [
+                '',
+                ''
+            ],
+            [
+                ' ',
+                ''
+            ],
+            [
+                'SELECT * FROM `foo.bar`',
+                'SELECT FROM foo.bar'
+            ],
+            [
+                'SELECT * FROM "foo.bar"',
+                'SELECT FROM foo.bar'
+            ],
+            [
+                'SELECT * FROM [foo.bar]',
+                'SELECT FROM foo.bar'
+            ],
+            [
+                'SELECT (x, y) FROM foo,bar,baz',
+                'SELECT FROM foo'
+            ],
+            [
+                'SELECT * FROM foo JOIN bar',
+                'SELECT FROM foo'
+            ],
+            [
+                'SELECT * FROM dollar$bill',
+                'SELECT FROM dollar$bill'
+            ],
+            [
+                'SELECT id FROM "myta\n-æøåble" WHERE id = 2323',
+                'SELECT FROM myta\n-æøåble'
+            ],
+            //[
+            //    'SELECT * FROM foo-- abc\n./*def*/bar',
+            //    'SELECT FROM foo.bar'
+            //],
+        ];
     }
 }

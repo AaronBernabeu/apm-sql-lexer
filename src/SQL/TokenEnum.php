@@ -61,7 +61,7 @@ final class TokenEnum
         }
 
         foreach (self::keywords()[$textLength] as $theKeyword) {
-            if ((':'.$currentText) === $theKeyword) {
+            if ((':'.strtoupper($currentText)) === $theKeyword) {
                 return $theKeyword;
             }
         }

@@ -75,8 +75,12 @@ final class SignatureTest extends TestCase
                 'SELECT FROM table1'
             ],
             [
-                'SELECT * FROM (SELECT foo FROM bar) AS foo_ba',
+                'SELECT * FROM (SELECT foo FROM bar) AS foo_bar',
                 'SELECT'
+            ],
+            [
+                'DELETE FROM foo.bar WHERE baz=1',
+                'DELETE FROM foo.bar'
             ],
         ];
     }

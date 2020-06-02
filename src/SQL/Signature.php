@@ -28,6 +28,9 @@ final class Signature
             case TokenEnum::T_SELECT:
                 $result = $this->parseSelect($tokens);
                 break;
+            case TokenEnum::T_DELETE:
+                $result = $this->parseDelete($tokens);
+                break;
         }
 
         if (null === $result) {
@@ -52,7 +55,7 @@ final class Signature
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     private function parseSelect(TokenCollection $tokens)
     {
@@ -70,7 +73,7 @@ final class Signature
                         continue 2;
                     }
                     if (false === $this->isNextToken(TokenEnum::T_IDENT, $tokens)) {
-                        break;
+                        break 2;
                     }
                     $nextIdent = $tokens->until(TokenEnum::T_IDENT);
                     $table = $this->parseDottedIdent($nextIdent, $tokens);
@@ -128,5 +131,21 @@ final class Signature
         }
 
         return null !== $nextToken && $nextToken->type() === $token;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function parseDelete(TokenCollection $tokens)
+    {
+        $nextFrom = $tokens->until(TokenEnum::T_FROM);
+        if (null === $nextFrom || false === $this->isNextToken(TokenEnum::T_IDENT, $tokens)) {
+            return null;
+        }
+
+        $nextIdent = $tokens->until(TokenEnum::T_IDENT);
+        $table = $this->parseDottedIdent($nextIdent, $tokens);
+
+        return \sprintf('DELETE FROM %s', $table);
     }
 }

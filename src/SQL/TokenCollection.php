@@ -57,4 +57,18 @@ final class TokenCollection
 
         return $value;
     }
+
+    /**
+     * @param int $length
+     * @return Token|null
+     */
+    public function peek($length)
+    {
+        $value = null;
+        if (true === \array_key_exists($this->position + $length, $this->tokens)) {
+            $value = $this->tokens[$this->position + $length];
+        }
+
+        return $value;
+    }
 }

@@ -29,16 +29,25 @@ final class TokenEnum
     const T_TRUNCATE = ':TRUNCATE';
     const T_UPDATE = ':UPDATE';
 
+    /**
+     * @return int
+     */
     public static function minKeywordLength()
     {
         return \array_keys(self::keywords())[0];
     }
 
+    /**
+     * @return int
+     */
     public static function maxKeywordLength()
     {
         return \array_keys(self::keywords())[\count(self::keywords()) - 1];
     }
 
+    /**
+     * @return array
+     */
     public static function keywords()
     {
         return [
@@ -52,6 +61,9 @@ final class TokenEnum
         ];
     }
 
+    /**
+     * @return string
+     */
     public static function findKeyword($currentText)
     {
         $textLength = \strlen($currentText);

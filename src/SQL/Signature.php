@@ -4,15 +4,28 @@ namespace Aaronidas\SQLLexer\SQL;
 
 final class Signature
 {
+    /**
+     * @var Tokenizer
+     */
     private $tokenizer;
+
+    /**
+     * @var string
+     */
     private $sql;
 
+    /**
+     * @var string $sql
+     */
     public function __construct($sql)
     {
         $this->sql = $sql;
         $this->tokenizer = new Tokenizer($sql);
     }
 
+    /**
+     * @return string
+     */
     public function parse()
     {
         $tokens = $this->tokenizer->scan();
@@ -21,7 +34,7 @@ final class Signature
         $result = null;
 
         if (null === $firstElement) {
-            return null;
+            return $this->parseFallback();
         }
 
         switch ($firstElement->type()) {
@@ -133,6 +146,9 @@ final class Signature
         return $table;
     }
 
+    /**
+     * @return bool
+     */
     public function isNextToken($token, TokenCollection $tokenCollection)
     {
         $peekLength = 0;
@@ -163,6 +179,9 @@ final class Signature
         return \sprintf('DELETE FROM %s', $table);
     }
 
+    /**
+     * @return string|null
+     */
     private function parseUpdate(TokenCollection $tokens)
     {
         if (false === $this->isNextToken(TokenEnum::T_IDENT, $tokens)) {
@@ -199,6 +218,9 @@ final class Signature
         return null;
     }
 
+    /**
+     * @return string|null
+     */
     private function parseInsertOrReplace(Token $action, TokenCollection $tokens)
     {
         $nextInto = $tokens->until(TokenEnum::T_INTO);
@@ -214,6 +236,9 @@ final class Signature
         return \sprintf('%s INTO %s', $action->content(), $table);
     }
 
+    /**
+     * @return string|null
+     */
     private function parseCall(TokenCollection $tokens)
     {
         $nextIdent = $tokens->until(TokenEnum::T_IDENT);

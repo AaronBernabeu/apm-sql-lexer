@@ -4,7 +4,14 @@ namespace Aaronidas\SQLLexer\SQL;
 
 final class TokenCollection
 {
+    /**
+     * @var Token[]
+     */
     private $tokens;
+
+    /**
+     * @var int
+     */
     private $position;
 
     /**

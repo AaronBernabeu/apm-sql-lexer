@@ -22,3 +22,6 @@ bash:
 
 logs:
 		docker-compose logs -f ${DOCKER_PHP_SERVICE}
+
+static-code-analysis:
+		sh -c "docker run --rm -v ${PWD}:/app phpstan/phpstan analyse ./src -l 6"

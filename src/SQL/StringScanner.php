@@ -4,10 +4,24 @@ namespace Aaronidas\SQLLexer\SQL;
 
 final class StringScanner
 {
+    /**
+     * @var string
+     */
     private $string;
+
+    /**
+     * @var int
+     */
     private $length;
+
+    /**
+     * @var int
+     */
     private $currentPos;
 
+    /**
+     * @var string $string
+     */
     public function __construct($string)
     {
         $this->string = $string;
@@ -15,11 +29,17 @@ final class StringScanner
         $this->currentPos = 0;
     }
 
+    /**
+     * @return int
+     */
     public function currentPosition()
     {
         return $this->currentPos;
     }
 
+    /**
+     * @var string $pattern
+     */
     public function skip($pattern)
     {
         if ($this->isEos()) {
@@ -31,6 +51,9 @@ final class StringScanner
         }
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentChar()
     {
         if ($this->isEos()) {
@@ -48,11 +71,17 @@ final class StringScanner
         return $match;
     }
 
+    /**
+     * @return bool
+     */
     private function isEos()
     {
         return $this->currentPos >= $this->length;
     }
 
+    /**
+     * @return string|null
+     */
     public function peek($length)
     {
         if ($this->isEos()) {

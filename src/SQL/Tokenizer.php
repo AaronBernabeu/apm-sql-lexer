@@ -4,14 +4,28 @@ namespace Aaronidas\SQLLexer\SQL;
 
 final class Tokenizer
 {
+    /**
+     * @var string
+     */
     private $input;
+
+    /**
+     * @var StringScanner
+     */
     private $scanner;
+
+    /**
+     * @var int
+     */
     private $currentStartPosition;
 
     const SPACE = '/[[:space:]]+/';
     const ALPHA = '/[[:alpha:]]/';
     const DIGIT = '/\d/';
 
+    /**
+     * @var string $input
+     */
     public function __construct($input)
     {
         $this->input = $input;
@@ -38,6 +52,10 @@ final class Tokenizer
         return new TokenCollection($tokens);
     }
 
+    /**
+     * @var string $char
+     * @return Token|null
+     */
     private function nextToken($char)
     {
         $token = null;
@@ -82,6 +100,9 @@ final class Tokenizer
         return $token;
     }
 
+    /**
+     * @return Token|null
+     */
     private function stringLiteral()
     {
         $delimiter = "'";
@@ -107,6 +128,9 @@ final class Tokenizer
         return null;
     }
 
+    /**
+     * @return Token|null
+     */
     private function bracketedComment()
     {
         if ('*' !== $this->scanner->peek(1)) {
@@ -139,6 +163,9 @@ final class Tokenizer
         return null;
     }
 
+    /**
+     * @return Token
+     */
     private function simpleComment()
     {
         if ('-' !== $this->scanner->peek(1)) {
@@ -154,6 +181,10 @@ final class Tokenizer
         return new Token(TokenEnum::T_COMMENT, $this->getCurrentText());
     }
 
+    /**
+     * @var string char
+     * @return Token
+     */
     private function quotedIdent($delimiter)
     {
         while (null !== $char = $this->scanner->getCurrentChar()) {
@@ -171,6 +202,10 @@ final class Tokenizer
         return new Token(TokenEnum::T_IDENT, $this->getQuotedCurrentText());
     }
 
+    /**
+     * @var bool $possibleKeyword
+     * @return Token
+     */
     private function keywordOrIdent($possibleKeyword)
     {
         while (null !== $char = $this->scanner->peek(1)) {
@@ -195,11 +230,17 @@ final class Tokenizer
         return new Token(TokenEnum::findKeyword($this->getCurrentText()), $this->getCurrentText());
     }
 
+    /**
+     * @return string
+     */
     private function getCurrentText()
     {
         return \substr($this->input, $this->currentStartPosition, $this->scanner->currentPosition() - $this->currentStartPosition);
     }
 
+    /**
+     * @return string
+     */
     private function getQuotedCurrentText()
     {
         return \substr($this->input, $this->currentStartPosition + 1, ($this->scanner->currentPosition() - ($this->currentStartPosition + 1)) - 1);

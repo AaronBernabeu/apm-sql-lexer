@@ -89,7 +89,7 @@ final class Tokenizer
     {
         $delimiter = "'";
 
-        while ($char = $this->scanner->getCurrentChar()) {
+        while (null !== $char = $this->scanner->getCurrentChar()) {
             if ("\\" === $char) {
                 // Skip escaped character: 'Aaron\'s house'
                 $this->getCurrentText();
@@ -118,7 +118,7 @@ final class Tokenizer
 
         $nesting = 1;
 
-        while ($char = $this->scanner->getCurrentChar()) {
+        while (null !== $char = $this->scanner->getCurrentChar()) {
             switch ($char) {
                 case '/':
                     if ('*' !== $this->scanner->peek(1)) {
@@ -148,7 +148,7 @@ final class Tokenizer
             return new Token(TokenEnum::T_OTHER, $this->getCurrentText());
         }
 
-        while ($char = $this->scanner->getCurrentChar()) {
+        while (null !== $char = $this->scanner->getCurrentChar()) {
             if ("\n" === $char) {
                 break;
             }
@@ -159,7 +159,7 @@ final class Tokenizer
 
     private function quotedIdent($delimiter)
     {
-        while ($char = $this->scanner->getCurrentChar()) {
+        while (null !== $char = $this->scanner->getCurrentChar()) {
             if ($char !== $delimiter) {
                 continue;
             }
@@ -176,7 +176,7 @@ final class Tokenizer
 
     private function keywordOrIdent($possibleKeyword)
     {
-        while ($char = $this->scanner->peek(1)) {
+        while (null !== $char = $this->scanner->peek(1)) {
             if ('_' === $char || '$' === $char || 1 === \preg_match(self::DIGIT, $char)) {
                 $possibleKeyword = false;
                 $this->scanner->getCurrentChar();

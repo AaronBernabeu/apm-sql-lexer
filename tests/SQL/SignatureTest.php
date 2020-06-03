@@ -82,6 +82,90 @@ final class SignatureTest extends TestCase
                 'DELETE FROM foo.bar WHERE baz=1',
                 'DELETE FROM foo.bar'
             ],
+            [
+                'UPDATE IGNORE foo.bar SET bar=1 WHERE baz=2',
+                'UPDATE foo.bar'
+            ],
+            [
+                'UPDATE ONLY foo AS bar SET baz=1',
+                'UPDATE foo'
+            ],
+            [
+                'INSERT INTO foo.bar (col) VALUES(?)',
+                'INSERT INTO foo.bar'
+            ],
+            [
+                'INSERT LOW_PRIORITY IGNORE INTO foo.bar (col) VALUES(?)',
+                'INSERT INTO foo.bar'
+            ],
+            [
+                'CALL foo(bar, 123)',
+                'CALL foo'
+            ],
+            [
+                'ALTER TABLE foo ADD ()',
+                'ALTER'
+            ],
+            [
+                'CREATE TABLE foo ...',
+                'CREATE'
+            ],
+            [
+                'DROP TABLE ...',
+                'DROP'
+            ],
+            [
+                'SAVEPOINT x_something',
+                'SAVEPOINT'
+            ],
+            [
+                'BEGIN',
+                'BEGIN'
+            ],
+            [
+                'COMMIT',
+                'COMMIT'
+            ],
+            [
+                'ROLLBACK',
+                'ROLLBACK'
+            ],
+            [
+                'SELECT * FROM (SELECT EOF',
+                'SELECT'
+            ],
+            [
+                'SELECT \'broken string FROM (SELECT * FROM ...',
+                'SELECT'
+            ],
+            [
+                'SELECT REPLACE(\'this\',\'is\',\'at\') FROM users',
+                'SELECT FROM users'
+            ],
+            [
+                'INSERT COIN TO PLAY',
+                'INSERT'
+            ],
+            [
+                'INSERT $2 INTO',
+                'INSERT'
+            ],
+            [
+                'UPDATE 99',
+                'UPDATE'
+            ],
+            [
+                'DELETE 99',
+                'DELETE'
+            ],
+            [
+                'DELETE FROM',
+                'DELETE'
+            ],
+            [
+                'CALL',
+                'CALL'
+            ],
         ];
     }
 }

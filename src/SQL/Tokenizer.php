@@ -43,7 +43,7 @@ final class Tokenizer
         $token = null;
         switch ($char) {
             case '_':
-                dump('_');
+                $token = $this->keywordOrIdent(false);
                 break;
             case '.':
                 $token = new Token(TokenEnum::T_PERIOD, $char);

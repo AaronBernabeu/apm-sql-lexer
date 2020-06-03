@@ -166,6 +166,10 @@ final class SignatureTest extends TestCase
                 'CALL',
                 'CALL'
             ],
+            [
+                'SELECT * FROM _underscore_table',
+                'SELECT FROM _underscore_table'
+            ],
         ];
     }
 }

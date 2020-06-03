@@ -48,9 +48,6 @@ final class Tokenizer
             case '.':
                 $token = new Token(TokenEnum::T_PERIOD, $char);
                 break;
-            case '$':
-                dump('$');
-                break;
             case '`':
                 $token = $this->quotedIdent('`');
                 break;

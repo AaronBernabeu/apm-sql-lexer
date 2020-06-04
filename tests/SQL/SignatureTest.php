@@ -13,9 +13,7 @@ final class SignatureTest extends TestCase
      */
     public function signature_test($query, $expected)
     {
-        $result = (new Signature($query))->parse();
-
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expected, Signature::parse($query));
     }
 
     public function sqlProvider()

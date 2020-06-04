@@ -17,16 +17,25 @@ final class Signature
     /**
      * @var string $sql
      */
-    public function __construct($sql)
+    private function __construct($sql)
     {
         $this->sql = $sql;
         $this->tokenizer = new Tokenizer($sql);
     }
 
     /**
+     * @var string $sql
      * @return string
      */
-    public function parse()
+    public static function parse($sql)
+    {
+        return (new self($sql))->scan();
+    }
+
+    /**
+     * @return string
+     */
+    private function scan()
     {
         $tokens = $this->tokenizer->scan();
         $firstElement = $tokens->nextValue();

@@ -77,13 +77,13 @@ final class Signature
      */
     private function parseFallback()
     {
-        $parts = explode(' ', $this->sql);
+        $parts = \explode(' ', \ltrim($this->sql));
         $result = '';
         if (true === \array_key_exists(0, $parts)) {
             $result = $parts[0];
         }
 
-        return ltrim($result);
+        return \strtoupper(\ltrim($result));
     }
 
     /**

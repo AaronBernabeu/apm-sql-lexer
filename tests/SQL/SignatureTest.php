@@ -168,6 +168,20 @@ final class SignatureTest extends TestCase
                 'SELECT * FROM _underscore_table',
                 'SELECT FROM _underscore_table'
             ],
+            [
+                ' select * FROM (SELECT * FROM foo)',
+                'SELECT'
+            ],
+            [
+                'insert into',
+                'INSERT'
+            ],
+            [
+                '           
+              select * FROM
+                foo',
+                'SELECT FROM foo'
+            ]
         ];
     }
 }
